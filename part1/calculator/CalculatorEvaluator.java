@@ -1,11 +1,11 @@
 import java.io.InputStream;
 import java.io.IOException;
 
-class CalculatorEvaluator {
+class Calculator {
     private final InputStream in;
     private int lookahead;
 
-    public CalculatorEvaluator(InputStream in) throws IOException {
+    public Calculator(InputStream in) throws IOException {
         this.in = in;
         lookahead = in.read();
     }
