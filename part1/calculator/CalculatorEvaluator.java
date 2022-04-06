@@ -54,8 +54,8 @@ class Calculator {
     }
 
     private int term() throws IOException, ParseError {
-        int factor = fact();
-        return term2(factor);
+        int curr = fact();
+        return term2(curr);
     }
 
     private int term2(int prev) throws IOException, ParseError {
@@ -77,9 +77,9 @@ class Calculator {
     private int fact() throws IOException, ParseError {
         if (isDigit(lookahead)) return evalDigit(lookahead);
         else if (lookahead == '(') {
-            int expression = exp();
+            int curr = exp();
             consume(')');
-            return expression;
+            return curr;
         }
         else throw new ParseError();
     }

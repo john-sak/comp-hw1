@@ -5,7 +5,7 @@ LOOKUP TABLE
 --------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 prog    |   #1  |   #1  |   #1  |   #1  |   #1  |   #1  |   #1  |   #1  |   #1  |   #1  |  err  |  err  |   #1  |  err  |  err  |
 exp     |   #2  |   #2  |   #2  |   #2  |   #2  |   #2  |   #2  |   #2  |   #2  |   #2  |  err  |  err  |   #2  |  err  |  err  |
-exp2    |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |   #3  |  err  |   #4  |  err  |   #4  |
+exp2    |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |   #3  |  err  |  err  |   #4  |   #4  |
 term    |   #5  |   #5  |   #5  |   #5  |   #5  |   #5  |   #5  |   #5  |   #5  |   #5  |  err  |  err  |   #5  |  err  |  err  |
 term2   |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |  err  |   #7  |   #6  |  err  |   #7  |   #7  |
 fact    |   #8  |   #9  |  #10  |  #11  |  #12  |  #13  |  #14  |  #15  |  #16  |  #17  |  err  |  err  |  #18  |  err  |  err  |
