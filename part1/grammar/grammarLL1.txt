@@ -1,10 +1,10 @@
 1. prog -> exp
 
-2. exp  -> num exp2
-3.      |  (exp)
+2. exp  -> num rest
+3.      |  (exp) rest
 
-4. exp2 -> op exp
-5.      |  e
+4. rest -> op exp
+5.      | e
 
 6. op   -> ^
 7.      |  &
