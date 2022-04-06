@@ -30,9 +30,10 @@ class CalculatorEvaluator {
     }
     
     private int prog() throws IOException, ParseError {
-        int result = exp();
-        if (lookahead != -1 && lookahead != '\n') throw new ParseError();
-        return result;
+        // int result = exp();
+        // if (lookahead != -1 && lookahead != '\n') throw new ParseError();
+        // return result;
+        return exp();
     }
 
     private int exp() throws IOException, ParseError {
@@ -57,7 +58,7 @@ class CalculatorEvaluator {
             consume(lookahead);
             int right = exp();
             return (left & right);
-        } else if (lookahead == ')' || lookahead == -1) {
+        } else if (lookahead == ')' || lookahead == -1 || lookahead == '\n') {
             return left;
         } else throw new ParseError(); 
     }
