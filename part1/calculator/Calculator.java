@@ -75,8 +75,13 @@ class Calculator {
     }
 
     private int fact() throws IOException, ParseError {
-        if (isDigit(lookahead)) return evalDigit(lookahead);
+        if (isDigit(lookahead)) {
+            int curr = evalDigit(lookahead);
+            consume(lookahead);
+            return curr;
+        }
         else if (lookahead == '(') {
+            consume('(');
             int curr = exp();
             consume(')');
             return curr;
