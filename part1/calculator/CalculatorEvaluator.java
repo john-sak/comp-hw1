@@ -52,18 +52,28 @@ class CalculatorEvaluator {
     }
 
     private int exp() throws IOException, ParseError {
-        // todo
+        if (isDigit(lookahead)) {
+            int digit = evalDigit(lookahead);
+            consume(lookahead);
+            return exp2(digit);
+        } else if (lookahead == '(') {
+            consume(lookahead);
+            int expression = exp();
+            consume(')');
+            return expression;
+        } else throw new ParseError();
     }
 
-    private int exp2() throws IOException, ParseError {
-        // todo
+    private int exp2(int left) throws IOException, ParseError {
+        if (lookahead == '^') {
+            consume(lookahead);
+            int right = exp();
+            return (left ^ right);
+        } else if (lookahead == '&') {
+            consume(lookahead);
+            int right = exp();
+            return (left & right);
+        } else if (lookahead == ')' || lookahead == -1) {
+            return left;
+        } else throw new ParseError(); 
     }
-
-    private int op() throws IOException, ParseError {
-        // todo
-    }
-
-    private int num() throws IOException, ParseError {
-        // todo
-    }
-}
