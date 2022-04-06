@@ -1,15 +1,16 @@
 1. prog -> exp
 
-2. exp  -> num rest
-3.      |  (exp) rest
+2. exp  -> term exp2
 
-4. rest -> op exp
-5.      | e
+3. exp2 -> ^ term exp2
+4.      |  e
 
-6. op   -> ^
-7.      |  &
+5. term -> fact term2
 
-8. num  -> 0
+6. term2-> & fact term2
+7.      |  e
+
+8. fact -> 0
 9.      |  1
 10.     |  2
 11.     |  3
@@ -19,3 +20,4 @@
 15.     |  7
 16.     |  8
 17.     |  9
+18.     | (exp)
