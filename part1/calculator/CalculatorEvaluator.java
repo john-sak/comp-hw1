@@ -23,22 +23,6 @@ class CalculatorEvaluator {
         return (c - '0');
     }
 
-    private boolean isOR(int c) {
-        return (c == '^');
-    }
-
-    private boolean isAND(int c) {
-        return (c == '&');
-    }
-
-    private boolean isLPar(int c) {
-        return (c == '(');
-    }
-
-    private boolean isRPar(int c) {
-        return (c == ')');
-    }
-
     public int eval() throws IOException, ParseError {
         int result = prog();
         if (lookahead != -1 && lookahead != '\n') throw new ParseError();
@@ -77,3 +61,4 @@ class CalculatorEvaluator {
             return left;
         } else throw new ParseError(); 
     }
+}
