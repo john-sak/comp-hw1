@@ -34,29 +34,53 @@ class Calculator {
     }
 
     private int exp() throws IOException, ParseError {
-        if (isDigit(lookahead)) {
-            int digit = evalDigit(lookahead);
-            consume(lookahead);
-            return rest(digit);
-        } else if (lookahead == '(') {
-            consume(lookahead);
-            int expression = exp();
-            consume(')');
-            return rest(expression);
-        } else throw new ParseError();
+        int curr = term();
+        return exp2(curr);
     }
 
-    private int rest(int prev) throws IOException, ParseError {
-        if (lookahead == '^') {
-            consume(lookahead);
-            int next = exp();
-            return (prev ^ next);
-        } else if (lookahead == '&') {
-            consume(lookahead);
-            int next = exp();
-            return (prev & next);
-        } else if (lookahead == ')' || lookahead == -1 || lookahead == '\n') {
-            return prev;
-        } else throw new ParseError(); 
+    private int exp2(int prev) throws IOException, ParseError {
+        switch (lookahead) {
+            case '^':
+                consume('^');
+                int curr = term();
+                return exp2(prev ^ curr);
+            case ')':
+            case '\n':
+            case -1:
+                return prev;
+            default:
+                throw new ParseError();
+        }
+    }
+
+    private int term() throws IOException, ParseError {
+        int factor = fact();
+        return term2(factor);
+    }
+
+    private int term2(int prev) throws IOException, ParseError {
+        switch (lookahead) {
+            case '&':
+                consume('&');
+                int curr = fact();
+                return term2(prev & curr);
+            case '^':
+            case ')':
+            case '\n':
+            case -1:
+                return prev;
+            default:
+                throw new ParseError();
+        }
+    }
+
+    private int fact() throws IOException, ParseError {
+        if (isDigit(lookahead)) return evalDigit(lookahead);
+        else if (lookahead == '(') {
+            int expression = exp();
+            consume(')');
+            return expression;
+        }
+        else throw new ParseError();
     }
 }
