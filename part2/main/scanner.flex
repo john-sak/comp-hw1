@@ -36,6 +36,7 @@ import java_cup.runtime.*;
    /**
       The following two methods create java_cup.runtime.Symbol objects
    **/
+   StringBuffer buffer = new StringBuffer();
    private Symbol symbol(int type) {
       return new Symbol(type, yyline, yycolumn);
    }
@@ -83,19 +84,19 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
    "("            { return symbol(sym.LPAREN); }
    ")"            { return symbol(sym.RPAREN); }
    ","            { return symbol(sym.COMMA); }
-   \"             { stringBuffer.setLength(0); yybegin(STRING); }
+   \"             { buffer.setLength(0); yybegin(STRING); }
    {WhiteSpace}   { /* just skip what was found, do nothing */ }
    {Identifier}   { return symbol(sym.ID, yytext()); }
 }
 
 <STRING> {
-   \"             { yybegin(YYINITIAL); return symbol(sym.STRING_LIT, stringBuffer.toString()); }
-   [^\n\r\"\\]+   { stringBuffer.append(yytext()); }
-   \\t            { stringBuffer.append('\t'); }
-   \\n            { stringBuffer.append('\n'); }
-   \\r            { stringBuffer.append('\r'); }
-   \\\"           { stringBuffer.append('\"'); }
-   \\             { stringBuffer.append('\\'); }
+   \"             { yybegin(YYINITIAL); return symbol(sym.STRING_LIT, buffer.toString()); }
+   [^\n\r\"\\]+   { buffer.append(yytext()); }
+   \\t            { buffer.append('\t'); }
+   \\n            { buffer.append('\n'); }
+   \\r            { buffer.append('\r'); }
+   \\\"           { buffer.append('\"'); }
+   \\             { buffer.append('\\'); }
 }
 
 /*
