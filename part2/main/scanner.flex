@@ -62,12 +62,10 @@ LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
 
 /*
-   A literal integer is is a number beginning with a number between
-   one and nine followed by zero or more numbers between zero and nine
-   or just a zero.
+   An identifier is a word beginning with a character and followed
+   by zero or more characters, numbers and underscores.
 */
-
-ident = [a-zA-Z][a-zA-Z0-9]*
+Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 
 %state STRING
 
