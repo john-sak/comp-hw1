@@ -83,19 +83,19 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
    "("            { return symbol(sym.LPAREN); }
    ")"            { return symbol(sym.RPAREN); }
    ","            { return symbol(sym.COMMA); }
-   \"             { StringBuffer.setLength(0); yybegin(STRING); }
+   \"             { stringBuffer.setLength(0); yybegin(STRING); }
    {WhiteSpace}   { /* just skip what was found, do nothing */ }
    {Identifier}   { return symbol(sym.ID, yytext()); }
 }
 
 <STRING> {
-   \"             { yybegin(YYINITIAL); return symbol(sym.STRING_LIT, StringBuffer.toString()); }
-   [^\n\r\"\\]+   { StringBuffer.append(yytext()); }
-   \\t            { StringBuffer.append('\t'); }
-   \\n            { StringBuffer.append('\n'); }
-   \\r            { StringBuffer.append('\r'); }
-   \\\"           { StringBuffer.append('\"'); }
-   \\             { StringBuffer.append('\\'); }
+   \"             { yybegin(YYINITIAL); return symbol(sym.STRING_LIT, stringBuffer.toString()); }
+   [^\n\r\"\\]+   { stringBuffer.append(yytext()); }
+   \\t            { stringBuffer.append('\t'); }
+   \\n            { stringBuffer.append('\n'); }
+   \\r            { stringBuffer.append('\r'); }
+   \\\"           { stringBuffer.append('\"'); }
+   \\             { stringBuffer.append('\\'); }
 }
 
 /*
