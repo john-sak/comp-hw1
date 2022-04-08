@@ -9,7 +9,9 @@ import java_cup.runtime.*;
 parser code {:
     // Connect this parser to a scanner!
     Scanner s;
-    Parser(Scanner s){ this.s=s; }
+    Parser(Scanner s) {
+        this.s=s;
+    }
 :}
 
 /* define how to connect to the scanner! */
