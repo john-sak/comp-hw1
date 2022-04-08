@@ -45,12 +45,12 @@ program     ::= dclr_list:d_list stmnt_list:s_list  {:
                                                     System.out.println("}");
                                                     :}
             ;
-dclr_list   ::= dclr_list:d_rest dclr:d     {: RESULT = String.format("%s\n%s", d_rest, d); :}
+dclr_list   ::= dclr:d dclr_list:d_rest     {: RESULT = String.format("%s\n%s", d_rest, d); :}
             |                               {: RESULT = ""; :}
             ;
 dclr        ::= ID:idnt LPAREN param_list:p RPAREN LCURLPAREN expr:e RCURLPAREN {: RESULT = String.format("\tpublic static String %s(%s) {\n\t\treturn %e;\n\t}\n", idnt, p, e); :}
             ;
-param_list  ::= param_list:p_rest COMMA param:p {: RESULT = String.format("%s, %s", p_rest, p); :}
+param_list  ::= param:p COMMA param_list:p_rest {: RESULT = String.format("%s, %s", p_rest, p); :}
             |   param:par                   {: RESULT = String.format("%s", par); :}
             |                               {: RESULT = ""; :}
             ;
@@ -75,14 +75,14 @@ bool_expr   ::= pref_expr:e                 {: RESULT = String.format("%s", e); 
             ;
 pref_expr   ::= str:s1 PREFIX str:s2        {: RESULT = String.format("(%s.startsWith(%s))", s2, s1); :}
             ;
-stmnt_list  ::= stmnt_list:s_rest stmnt:s   {: RESULT = String.format("%s\t\tSystem.out.println(%s);\n", s_rest, s); :}
+stmnt_list  ::= stmnt:s stmnt_list:s_rest   {: RESULT = String.format("%s\t\tSystem.out.println(%s);\n", s_rest, s); :}
             |                               {: RESULT = ""; :}
             ;
 stmnt       ::= func_call:f                 {: RESULT = String.format("%s", f); :}
             ;
 func_call   ::= ID:idnt LPAREN arg_list:args RPAREN {: RESULT = String.format("%s(%s)", idnt, args); :}
             ;
-arg_list    ::= arg_list:a_rest COMMA arg:a {: RESULT = String.format("%s, %s", a_rest, a); :}
+arg_list    ::= arg:a COMMA arg_list:a_rest {: RESULT = String.format("%s, %s", a_rest, a); :}
             |   arg:a                       {: RESULT = String.format("%s", a); :}
             |                               {: RESULT = ""; :}
             ;
