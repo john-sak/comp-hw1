@@ -1,4 +1,3 @@
-/* Simple +/-/* expression language; parser evaluates constant expressions on the fly*/
 /**
  *  Package and Import Specifications
  */
@@ -21,12 +20,12 @@ scan with {: return s.next_token(); :};
  */
 
 /* Terminals (tokens returned by the scanner). */
-terminal            SEMI, PLUS, MINUS, TIMES, UMINUS, LPAREN, RPAREN;
-terminal Integer    NUMBER;        // our scanner provides numbers as integers
+terminal            PLUS, REVERSE, PREFIX, LPAREN, RPAREN, LCURLPAREN, RCURLPAREN, COMMA, IF, ELSE;
+terminal String     ID, STRING_LIT;
 
 /*  Non terminals */
-non terminal            expr_list;
-non terminal Integer    expr;      // used to store evaluated subexpressions
+non terminal            expr;
+non terminal String     program;
 
 /**
  *  Precedence Declarations
@@ -38,14 +37,39 @@ precedence left UMINUS;
 /**
  *  The Grammar Rules
  */
-expr_list ::= expr_list expr:e SEMI         {: System.out.println(e);:}
-            | expr:e SEMI                   {: System.out.println(e);:}
-;
-expr      ::= expr:e1 PLUS  expr:e2         {: RESULT = e1+e2;       :}
-             | expr:e1 MINUS expr:e2        {: RESULT = e1-e2;       :}
-             | expr:e1 TIMES expr:e2        {: RESULT = e1*e2;       :}
-             | MINUS expr:e                 {: RESULT = -e;          :}
-  	         %prec UMINUS
-             | LPAREN expr:e RPAREN	        {: RESULT = e;           :}
-             | NUMBER:n	                    {: RESULT = n;           :}
-             ;
+program     ::= dclr_list expr_list
+            ;
+dclr_list   ::= dclr_list dclr
+            |   dclr
+            ;
+dclr        ::= ID LPAREN param_list RPAREN LCURLPAREN expr RCURLPAREN
+            |
+            ;
+param_list  ::= param_list COMMA param
+            |   param
+            ;
+param       ::= ID
+            |
+            ;
+expr_list   ::= expr_list expr
+            |   expr
+            ;
+expr        ::= conc_expr
+            |   rev_expr
+            |   if_expr
+            |   ID
+            |   STRING_LIT
+            ;
+conc_expr   ::= str PLUS str
+            ;
+rev_expr    ::= REVERSE str
+            ;
+if_expr     ::= IF LPAREN bool_expr RPAREN expr ELSE expr
+            ;
+str         ::= STRING_LIT
+            | ID
+            ;
+bool_expr   ::= pref_expr
+            ;
+pref_expr   ::= str PREFIX str
+            ;
