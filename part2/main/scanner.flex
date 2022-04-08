@@ -73,19 +73,19 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 /* ------------------------Lexical Rules Section---------------------- */
 
 <YYINITIAL> {
-/* operators */
-   "+"         { return symbol(sym.PLUS); }
-   "reverse"   { return symbol(sym.REVERSE); }
-   "prefix"    { return symbol(sym.PREFIX); }
-   "("         { return symbol(sym.LPAREN); }
-   ")"         { return symbol(sym.RPAREN); }
-   "{"         { return symbol(sym.LCURLPAREN); }
-   "}"         { return symbol(sym.RCURLPAREN); }
-   ","         { return symbol(sym.COMMA); }
-   "if"        { return symbol(sym.IF); }
-   "else"      { return symbol(sym.ELSE); }
-   {ident}     { return symbol(sym.ID, yytext()); }
-   \"          { string.setLength(0); yybegin(STRING); }
+   "reverse"      { return symbol(sym.REVERSE); }
+   "+"            { return symbol(sym.PLUS); }
+   "if"           { return symbol(sym.IF); }
+   "else"         { return symbol(sym.ELSE); }
+   "prefix"       { return symbol(sym.PREFIX); }
+   "("            { return symbol(sym.LPAREN); }
+   ")"            { return symbol(sym.RPAREN); }
+   "{"            { return symbol(sym.LCURLPAREN); }
+   "}"            { return symbol(sym.RCURLPAREN); }
+   ","            { return symbol(sym.COMMA); }
+   \"             { string.setLength(0); yybegin(STRING); }
+   {WhiteSpace}   { /* just skip what was found, do nothing */ }
+   {Identifier}   { return symbol(sym.ID, yytext()); }
 }
 
 <STRING> {
@@ -98,10 +98,8 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
    \\             { string.append('\\'); }
 }
 
-{WhiteSpace}   { /* just skip what was found, do nothing */ }
-
 /*
    No token was found for the input so through an error.  Print out an
    Illegal character message with the illegal character that was found.
 */
-[^]   { throw new Error("Illegal character <"+yytext()+">"); }
+[^]               { throw new Error("Illegal character <"+yytext()+">"); }
