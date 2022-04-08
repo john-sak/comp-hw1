@@ -53,7 +53,7 @@ program     ::= dclr_list:d_list stmnt_list:s_list  {:
 dclr_list   ::= dclr:d dclr_list:d_rest     {: RESULT = String.format("%s\n%s", d_rest, d); :}
             |                               {: RESULT = ""; :}
             ;
-dclr        ::= ID:idnt LPAREN param_list:p RPAREN LCURLPAREN expr:e RCURLPAREN {: RESULT = String.format("\tpublic static String %s(%s) {\n\t\treturn %e;\n\t}\n", idnt, p, e); :}
+dclr        ::= ID:idnt LPAREN param_list:p RPAREN LCURLPAREN expr:e RCURLPAREN {: RESULT = String.format("\tpublic static String %s(%s) {\n\t\treturn %s;\n\t}\n", idnt, p, e); :}
             ;
 param_list  ::= param:p COMMA param_list:p_rest {: RESULT = String.format("%s, %s", p_rest, p); :}
             |   param:par                   {: RESULT = String.format("%s", par); :}
