@@ -66,7 +66,6 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
    one and nine followed by zero or more numbers between zero and nine
    or just a zero.
 */
-dec_int_lit = 0 | [1-9][0-9]*
 
 ident = [a-zA-Z][a-zA-Z0-9]*
 

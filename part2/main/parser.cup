@@ -24,52 +24,59 @@ terminal            PLUS, REVERSE, PREFIX, LPAREN, RPAREN, LCURLPAREN, RCURLPARE
 terminal String     ID, STRING_LIT;
 
 /*  Non terminals */
-non terminal            expr;
-non terminal String     program;
+non terminal String     program, dclr_list, dclr, param_list, param, expr, conc_expr, str, rev_expr, if_expr, bool_expr, pref_expr, stmnt_list, stmnt, func_call, arg_list, arg;
 
 /**
  *  Precedence Declarations
  */
-precedence left PLUS, MINUS;
-precedence left TIMES;
-precedence left UMINUS;
 
 /**
  *  The Grammar Rules
  */
-program     ::= dclr_list expr_list
+program     ::= dclr_list stmnt_list        {::}
             ;
-dclr_list   ::= dclr_list dclr
-            |   dclr
+dclr_list   ::= dclr_list dclr              {::}
+            |   dclr                        {::}
+            |                               {::}
             ;
-dclr        ::= ID LPAREN param_list RPAREN LCURLPAREN expr RCURLPAREN
-            |
+dclr        ::= ID LPAREN param_list RPAREN LCURLPAREN expr RCURLPAREN      {::}
             ;
-param_list  ::= param_list COMMA param
-            |   param
+param_list  ::= param_list COMMA param      {::}
+            |   param                       {::}
             ;
-param       ::= ID
-            |
+param       ::= ID                          {::}
+            |                               {::}
             ;
-expr_list   ::= expr_list expr
-            |   expr
+expr        ::= conc_expr                   {::}
+            |   rev_expr                    {::}
+            |   if_expr                     {::}
+            |   ID                          {::}
+            |   STRING_LIT                  {::}
             ;
-expr        ::= conc_expr
-            |   rev_expr
-            |   if_expr
-            |   ID
-            |   STRING_LIT
+conc_expr   ::= str PLUS str                {::}
             ;
-conc_expr   ::= str PLUS str
+str         ::= STRING_LIT                  {::}
+            |   ID                          {::}
             ;
-rev_expr    ::= REVERSE str
+rev_expr    ::= REVERSE str                 {::}
             ;
-if_expr     ::= IF LPAREN bool_expr RPAREN expr ELSE expr
+if_expr     ::= IF LPAREN bool_expr RPAREN expr ELSE expr       {::}
             ;
-str         ::= STRING_LIT
-            | ID
+bool_expr   ::= pref_expr                   {::}
             ;
-bool_expr   ::= pref_expr
+pref_expr   ::= str PREFIX str              {::}
             ;
-pref_expr   ::= str PREFIX str
+stmnt_list  ::= stmnt_list stmnt_list       {::}
+            |   stmnt                       {::}
+            ;
+stmnt       ::= func_call                   {::}
+            ;
+func_call   ::= ID:idnt LPAREN arg_list:args RPAREN {: RESULT = String.format("%s(%s)", idnt, args); :}
+            ;
+arg_list    ::= arg_list:a_rest COMMA arg:a {: RESULT = String.format("%s, %s", a_rest, a); :}
+            |   arg:a                       {: RESULT = String.format("%s", a); :}
+            ;
+arg         ::= func_call:func              {: RESULT = String.format("%s", func); :}
+            |   STRING_LIT:s                {: RESULT = String.format("\"%s\"", s); :}
+            |                               {: RESULT = ""; :}
             ;
