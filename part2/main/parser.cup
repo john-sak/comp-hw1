@@ -30,6 +30,10 @@ non terminal String     program, dclr_list, dclr, param_list, param, expr, conc_
  *  Precedence Declarations
  */
 
+precedence nonassoc LPAREN, RPAREN;
+precedence nonassoc LCURLPAREN, RCURLPAREN;
+precedence nonassoc PREFIX;
+precedence nonassoc IF, ELSE;
 precedence left PLUS;
 precedence nonassoc REVERSE;
 

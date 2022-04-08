@@ -78,10 +78,10 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
    "if"           { return symbol(sym.IF); }
    "else"         { return symbol(sym.ELSE); }
    "prefix"       { return symbol(sym.PREFIX); }
-   "("            { return symbol(sym.LPAREN); }
-   ")"            { return symbol(sym.RPAREN); }
    "{"            { return symbol(sym.LCURLPAREN); }
    "}"            { return symbol(sym.RCURLPAREN); }
+   "("            { return symbol(sym.LPAREN); }
+   ")"            { return symbol(sym.RPAREN); }
    ","            { return symbol(sym.COMMA); }
    \"             { string.setLength(0); yybegin(STRING); }
    {WhiteSpace}   { /* just skip what was found, do nothing */ }
