@@ -30,6 +30,9 @@ non terminal String     program, dclr_list, dclr, param_list, param, expr, conc_
  *  Precedence Declarations
  */
 
+precedence left PLUS;
+precedence nonassoc REVERSE;
+
 /**
  *  The Grammar Rules
  */
