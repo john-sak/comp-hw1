@@ -33,9 +33,7 @@ non terminal String program;
  *  Precedence Declarations
  */
 
-precedence nonassoc STRING_LIT;
 precedence nonassoc ID;
-precedence nonassoc LPAREN, RPAREN;
 precedence nonassoc LCURLPAREN, RCURLPAREN;
 precedence nonassoc PREFIX;
 precedence nonassoc IF, ELSE;
