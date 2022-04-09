@@ -45,6 +45,9 @@ precedence nonassoc REVERSE;
 /**
  *  The Grammar Rules
  */
+
+start with program;
+
 program     ::= dclr_list:d_list stmnt_list:s_list  {:
                                                     System.out.println("public class Main {");
                                                     System.out.println("\tpublic static void main(String[] args) {");
