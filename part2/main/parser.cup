@@ -26,12 +26,14 @@ terminal            PLUS, REVERSE, PREFIX, LPAREN, RPAREN, LCURLPAREN, RCURLPARE
 terminal String     ID, STRING_LIT;
 
 /*  Non terminals */
-non terminal String     program, dclr_list, dclr, param_list, param, expr, conc_expr, str, rev_expr, if_expr, bool_expr, pref_expr, stmnt_list, stmnt, func_call, arg_list, arg;
+non terminal        dclr_list, dclr, param_list, param, expr, conc_expr, str, rev_expr, if_expr, bool_expr, pref_expr, stmnt_list, stmnt, func_call, arg_list, arg;
+non terminal String program;
 
 /**
  *  Precedence Declarations
  */
 
+precedence nonassoc STRING_LIT;
 precedence nonassoc ID;
 precedence nonassoc LPAREN, RPAREN;
 precedence nonassoc LCURLPAREN, RCURLPAREN;
