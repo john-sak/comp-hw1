@@ -55,12 +55,12 @@ import java_cup.runtime.*;
 /*
    A line terminator is a \r (carriage return), \n (line feed), or \r\n.
 */
-LineTerminator = \r|\n|\r\n
+LineTerminator = [\r\n]
 
 /*
    White space is a line terminator, space, tab, or line feed.
 */
-WhiteSpace     = {LineTerminator} | [ \t\f]
+WhiteSpace     = {LineTerminator} | [\ \t\f]
 
 /*
    An identifier is a word beginning with a character and followed
