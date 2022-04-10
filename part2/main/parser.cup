@@ -64,11 +64,11 @@ expr        ::= conc_expr:e                 {: RESULT = e; :}
             |   rev_expr:e                  {: RESULT = e; :}
             |   if_expr:e                   {: RESULT = e; :}
             |   ID:idnt                     {: RESULT = idnt; :}
-            |   STRING_LIT:s                {: RESULT = String.format("\"%s\"", s); :}
+            |   STRING_LIT:s                {: RESULT = s; :}
             ;
 conc_expr   ::= str:s1 PLUS str:s2          {: RESULT = String.format("(%s + %s)", s1, s2); :}
             ;
-str         ::= STRING_LIT:s                {: RESULT = String.format("\"%s\"", s); :}
+str         ::= STRING_LIT:s                {: RESULT = s; :}
             |   ID:idnt                     {: RESULT = idnt; :}
             ;
 rev_expr    ::= REVERSE str:s               {: RESULT = String.format("(new StringBuilder(%s).reverse().toString())", s); :}
@@ -91,5 +91,5 @@ arg_list    ::= arg_list:a_rest COMMA arg:a {: RESULT = String.format("%s, %s", 
             |                               {: RESULT = ""; :}
             ;
 arg         ::= func_call:f                 {: RESULT = f; :}
-            |   STRING_LIT:s                {: RESULT = String.format("\"%s\"", s); :}
+            |   STRING_LIT:s                {: RESULT = s; :}
             ;
