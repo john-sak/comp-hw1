@@ -12,4 +12,4 @@ fullname(first_name, sep, last_name) {
 
 name()
 surname()
-fullname(name(), " ", last_name())
+fullname(name(), " ", surname())
