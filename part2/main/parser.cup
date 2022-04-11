@@ -89,7 +89,7 @@ pref_expr   ::= expr:e1 PREFIX expr:e2      {: RESULT = String.format("(%s.start
 stmnt_list  ::= stmnt:s                     {: RESULT = s; :}
             |   stmnt_list:s_rest stmnt:s   {: RESULT = String.format("%s%s", s_rest, s); :}
             ;
-stmnt       ::= func_call:f                 {: RESULT = String.format("\t\tSystem.out.println(%s);\n", f); :}
+stmnt       ::= expr:e                      {: RESULT = String.format("\t\tSystem.out.println(%s);\n", e); :}
             ;
 func_call   ::= FID:idnt arg_list:args RPAREN   {: RESULT = String.format("%s%s)", idnt, args); :}
             ;
