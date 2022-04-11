@@ -33,7 +33,10 @@ non terminal String program;
  *  Precedence Declarations
  */
 
-
+precedence left     COMMA;
+precedence left     IF, ELSE;
+precedence left     PLUS;
+precedence nonassoc REVERSE;
 
 /**
  *  The Grammar Rules
@@ -60,7 +63,7 @@ dclr_list   ::= dclr:d                      {: RESULT = d; :}
             ;
 dclr        ::= FID:idnt param_list:p FUNC_DEC expr:e RCURLPAREN    {: RESULT = String.format("\n\tpublic static String %s%s) {\n\t\treturn %s;\n\t}\n", idnt, p, e); :}
             ;
-param_list  ::= param_list:p_rest COMMA param:p {: RESULT = String.format("%s, %s", p_rest, p); :}
+param_list  ::= param:p COMMA param_list:p_rest {: RESULT = String.format("%s, %s", p, p_rest); :}
             |   param:p                         {: RESULT = p; :}
             |                                   {: RESULT = ""; :}
             ;
@@ -89,7 +92,7 @@ stmnt       ::= func_call:f                 {: RESULT = f; :}
             ;
 func_call   ::= FID:idnt arg_list:args RPAREN   {: RESULT = String.format("%s%s)", idnt, args); :}
             ;
-arg_list    ::= arg_list:a_rest COMMA arg:a {: RESULT = String.format("%s, %s", a_rest, a); :}
+arg_list    ::= arg:a COMMA arg_list:a_rest {: RESULT = String.format("%s, %s", a, a_rest); :}
             |   arg:a                       {: RESULT = a; :}
             |                               {: RESULT = ""; :}
             ;
