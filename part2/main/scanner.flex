@@ -66,7 +66,9 @@ WhiteSpace     = {LineTerminator} | [\ \t\f]
    An identifier is a word beginning with a character and followed
    by zero or more characters, numbers and underscores.
 */
-Identifier     = [a-zA-Z][a-zA-Z0-9_]*
+FID            = [a-zA-Z][a-zA-Z0-9_]*\(
+VID            = [a-zA-Z][a-zA-Z0-9_]*
+FUNC_DEC       = \){WhiteSpace}*\{
 
 %state STRING
 
@@ -79,14 +81,15 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
    "if"           { return symbol(sym.IF); }
    "else"         { return symbol(sym.ELSE); }
    "prefix"       { return symbol(sym.PREFIX); }
-   "{"            { return symbol(sym.LCURLPAREN); }
+   {FID}          { return symbol(sym.FID, yytext()); }
+   {VID}          { return symbol(sym.VID, yytext()); }
+   {FUNC_DEC}     { return symbol(sym.FUNC_DEC); }
    "}"            { return symbol(sym.RCURLPAREN); }
    "("            { return symbol(sym.LPAREN); }
    ")"            { return symbol(sym.RPAREN); }
    ","            { return symbol(sym.COMMA); }
    \"             { buffer.setLength(0); yybegin(STRING); }
    {WhiteSpace}   { /* just skip what was found, do nothing */ }
-   {Identifier}   { return symbol(sym.ID, yytext()); }
 }
 
 <STRING> {

@@ -22,74 +22,82 @@ scan with {: return s.next_token(); :};
  */
 
 /* Terminals (tokens returned by the scanner). */
-terminal        REVERSE, PLUS, IF, ELSE, PREFIX, LCURLPAREN, RCURLPAREN, LPAREN, RPAREN, COMMA;
-terminal String ID, STRING_LIT;
+terminal        REVERSE, PLUS, IF, ELSE, PREFIX, FUNC_DEC, RCURLPAREN, LPAREN, RPAREN, COMMA;
+terminal String FID, VID, STRING_LIT;
 
 /*  Non terminals */
-non terminal        dclr_list, dclr, param_list, param, expr, conc_expr, str, rev_expr, if_expr, bool_expr, pref_expr, stmnt_list, stmnt, func_call, arg_list, arg;
+non terminal        dclr_list, dclr, param_list, param, expr, conc_expr, rev_expr, if_expr, bool_expr, pref_expr, stmnt_list, stmnt, func_call, arg_list, arg;
 non terminal String program;
 
 /**
  *  Precedence Declarations
  */
 
-precedence left LPAREN;
-precedence left ID, LCURLPAREN;
+precedence left     COMMA;
+precedence left     IF, ELSE;
+precedence left     PLUS;
+precedence nonassoc REVERSE;
 
 /**
  *  The Grammar Rules
  */
 
 program     ::= dclr_list:d_list stmnt_list:s_list  {:
-                                                    System.out.println("public class Main {");
-                                                    System.out.println("\tpublic static void main(String[] args) {");
-                                                    System.out.printf("%s", s_list);
-                                                    System.out.println("\t}");
-                                                    System.out.printf("%s", d_list);
-                                                    System.out.println("}");
+                                                        System.out.println("public class Main {");
+                                                        System.out.println("\tpublic static void main(String[] args) {");
+                                                        System.out.printf("%s", s_list);
+                                                        System.out.println("\t}");
+                                                        System.out.printf("%s", d_list);
+                                                        System.out.println("}");
+                                                    :}
+            |   stmnt_list:s_list                   {:
+                                                        System.out.println("public class Main {");
+                                                        System.out.println("\tpublic static void main(String[] args) {");
+                                                        System.out.printf("%s", s_list);
+                                                        System.out.println("\t}");
+                                                        System.out.println("}");
                                                     :}
             ;
-dclr_list   ::= dclr_list:d_rest dclr:d     {: RESULT = String.format("%s%s\n", d_rest, d); :}
-            |                               {: RESULT = ""; :}
+dclr_list   ::= dclr:d                      {: RESULT = d; :}
+            |   dclr_list:d_rest dclr:d     {: RESULT = String.format("%s%s", d_rest, d); :}
             ;
-dclr        ::= ID:idnt LPAREN param_list:p RPAREN LCURLPAREN expr:e RCURLPAREN {: RESULT = String.format("\tpublic static String %s(%s) {\n\t\treturn %s;\n\t}\n", idnt, p, e); :}
+dclr        ::= FID:idnt param_list:p FUNC_DEC expr:e RCURLPAREN    {: RESULT = String.format("\n\tpublic static String %s%s) {\n\t\treturn %s;\n\t}\n", idnt, p, e); :}
             ;
-param_list  ::= param_list:p_rest COMMA param:p {: RESULT = String.format("%s, %s", p_rest, p); :}
-            |   param:p                         {: RESULT = p; :}
+param_list  ::= param:p COMMA param_list:p_rest {: RESULT = String.format("String %s, %s", p, p_rest); :}
+            |   param:p                         {: RESULT = String.format("String %s", p); :}
             |                                   {: RESULT = ""; :}
             ;
-param       ::= ID:idnt                     {: RESULT = idnt; :}
+param       ::= VID:idnt                    {: RESULT = idnt; :}
             ;
 expr        ::= conc_expr:e                 {: RESULT = e; :}
             |   rev_expr:e                  {: RESULT = e; :}
             |   if_expr:e                   {: RESULT = e; :}
-            |   ID:idnt                     {: RESULT = idnt; :}
+            |   func_call:f                 {: RESULT = f; :}
+            |   VID:idnt                    {: RESULT = idnt; :}
             |   STRING_LIT:s                {: RESULT = String.format("\"%s\"", s); :}
             ;
-conc_expr   ::= str:s1 PLUS str:s2          {: RESULT = String.format("(%s + %s)", s1, s2); :}
+conc_expr   ::= expr:e1 PLUS expr:e2        {: RESULT = String.format("(%s + %s)", e1, e2); :}
             ;
-str         ::= STRING_LIT:s                {: RESULT = String.format("\"%s\"", s); :}
-            |   ID:idnt                     {: RESULT = idnt; :}
-            ;
-rev_expr    ::= REVERSE str:s               {: RESULT = String.format("(new StringBuilder(%s).reverse().toString())", s); :}
+rev_expr    ::= REVERSE expr:e              {: RESULT = String.format("(new StringBuilder(%s).reverse().toString())", e); :}
             ;
 if_expr     ::= IF LPAREN bool_expr:bool_e RPAREN expr:e1 ELSE expr:e2  {: RESULT = String.format("(%s ? %s : %s)", bool_e, e1, e2); :}
             ;
 bool_expr   ::= pref_expr:e                 {: RESULT = e; :}
             ;
-pref_expr   ::= str:s1 PREFIX str:s2        {: RESULT = String.format("(%s.startsWith(%s))", s2, s1); :}
+pref_expr   ::= expr:e1 PREFIX expr:e2      {: RESULT = String.format("(%s.startsWith(%s))", e2, e1); :}
             ;
-stmnt_list  ::= stmnt_list:s_rest stmnt:s   {: RESULT = String.format("%s%s\n", s_rest, s); :}
-            |                               {: RESULT = ""; :}
+stmnt_list  ::= stmnt:s                     {: RESULT = s; :}
+            |   stmnt_list:s_rest stmnt:s   {: RESULT = String.format("%s%s", s_rest, s); :}
             ;
-stmnt       ::= func_call:f                 {: RESULT = f; :}
+stmnt       ::= func_call:f                 {: RESULT = String.format("\t\tSystem.out.println(%s);\n", f); :}
             ;
-func_call   ::= ID:idnt LPAREN arg_list:args RPAREN {: RESULT = String.format("%s(%s)", idnt, args); :}
+func_call   ::= FID:idnt arg_list:args RPAREN   {: RESULT = String.format("%s%s)", idnt, args); :}
             ;
-arg_list    ::= arg_list:a_rest COMMA arg:a {: RESULT = String.format("%s, %s", a_rest, a); :}
+arg_list    ::= arg:a COMMA arg_list:a_rest {: RESULT = String.format("%s, %s", a, a_rest); :}
             |   arg:a                       {: RESULT = a; :}
             |                               {: RESULT = ""; :}
             ;
 arg         ::= func_call:f                 {: RESULT = f; :}
             |   STRING_LIT:s                {: RESULT = String.format("\"%s\"", s); :}
+            |   param:idnt                  {: RESULT = idnt; :}
             ;
